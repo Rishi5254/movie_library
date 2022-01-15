@@ -1,0 +1,6 @@
+WTForms==3.0.1
+Flask==2.0.2
+Werkzeug==2.0.2
+SQLAlchemy==1.4.29
+form==0.0.1
+requests==2.27.1
