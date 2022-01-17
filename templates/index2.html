@@ -25,9 +25,9 @@
         <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
         <nav id="sidebar-wrapper">
             <ul class="sidebar-nav">
-                <li class="sidebar-brand"><a href="#page-top">Welcome {{ username }}</a></li>
-                <li class="sidebar-nav-item"><a href="{{ url_for('homepage', user_id=user_id) }}">Home</a></li>
-                <li class="sidebar-nav-item"><a href="{{ url_for('search', user_id=user_id) }}">Search movie</a></li>
+                <li class="sidebar-brand"><a href="#page-top">Hello {{ username }}</a></li>
+                <li class="sidebar-nav-item"><a href="{{ url_for('homepage') }}">Home</a></li>
+                <li class="sidebar-nav-item"><a href="{{ url_for('search') }}">Search movie</a></li>
                 <li class="sidebar-nav-item"><a href="#movies-list">All Movies List</a></li>
                 <li class="sidebar-nav-item"><a href="">Read me</a></li>
                 <li class="sidebar-nav-item"><a href="https://github.com/Rishi5254/movie_library">GitHub</a></li>
@@ -40,7 +40,7 @@
             <div class="container px-4 px-lg-5 text-center">
                 <h1 class="mb-1">Movie Library</h1>
                 <h3 class="mb-5"><em>Make a List of your Fav Movies</em></h3>
-                <a class="btn btn-outline-dark btn-xl" href="{{ url_for('search', user_id=user_id) }}">Search for Movie</a>
+                <a class="btn btn-outline-dark btn-xl" href="{{ url_for('search') }}">Search for Movie</a>
             </div>
         </header>
 

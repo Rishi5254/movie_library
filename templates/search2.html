@@ -27,9 +27,9 @@
         <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
         <nav id="sidebar-wrapper">
             <ul class="sidebar-nav">
-                <li class="sidebar-brand"><a href="#page-top">Movie Library</a></li>
-                <li class="sidebar-nav-item"><a href="{{ url_for('homepage', user_id=user_id) }}">Home</a></li>
-                <li class="sidebar-nav-item"><a href="{{ url_for('search', user_id=user_id) }}">Search movie</a></li>
+                <li class="sidebar-brand"><a href="#page-top">Hello {{ username }}</a></li>
+                <li class="sidebar-nav-item"><a href="{{ url_for('homepage') }}">Home</a></li>
+                <li class="sidebar-nav-item"><a href="{{ url_for('search') }}">Search movie</a></li>
                 <li class="sidebar-nav-item"><a href="">Read me</a></li>
                 <li class="sidebar-nav-item"><a href="https://github.com/Rishi5254/movie_library">GitHub</a></li>
                 <li class="sidebar-nav-item"><a href="{{ url_for('logout_use') }}">Logout</a></li>
@@ -74,7 +74,7 @@
                               </div>
                         </div>
                         <h2 class="mb-5">Flip Card to view Movie Details</h2>
-                        <a href="{{ url_for('add_to_db', user_id=user_id, title=data['title'], release_date=data['release_date'].split('-')[0], rating=data['vote_average'], description=data['overview'], img_url=data['poster_path']) }}" class="btn btn-primary btn-lg">Add to List</a>
+                        <a href="{{ url_for('add_to_db', title=data['title'], release_date=data['release_date'].split('-')[0], rating=data['vote_average'], description=data['overview'], img_url=data['poster_path']) }}" class="btn btn-primary btn-lg">Add to List</a>
                     {% endif %}
 
                     </div>

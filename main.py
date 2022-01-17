@@ -77,7 +77,7 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 login_user(user)
-                return redirect(url_for('homepage', user_id=user.id ))
+                return redirect(url_for('homepage'))
             else:
                 flash('Incorrect Password')
                 return redirect('login')
@@ -90,7 +90,6 @@ def login():
 @app.route('/add')
 @login_required
 def add_to_db():
-    user_id = request.args.get('user_id')
     title = request.args.get('title')
     description = request.args.get('description')
     year = request.args.get('release_date')
@@ -100,10 +99,10 @@ def add_to_db():
         for _ in range(1000 - len(description)):
             description += " "
     print(len(description))
-    data = MoviesData(user_id=user_id, title=title, year=year, description=description, rating=rating, img_url=url)
+    data = MoviesData(user_id=current_user.id, title=title, year=year, description=description, rating=rating, img_url=url)
     db.session.add(data)
     db.session.commit()
-    return redirect(url_for('homepage', user_id=user_id))
+    return redirect(url_for('homepage'))
 
 
 @app.route('/logout')
@@ -130,31 +129,29 @@ def readme():
 
 @app.route('/homepage')
 def homepage():
-    id = request.args.get('user_id')
-    movies = db.session.query(MoviesData).filter_by(user_id=id)
-    ordered_movies = db.session.query(MoviesData).filter_by(user_id=id).order_by(MoviesData.rating.desc()).all()[:3]
+    movies = db.session.query(MoviesData).filter_by(user_id=current_user.id)
+    ordered_movies = db.session.query(MoviesData).filter_by(user_id=current_user.id).order_by(MoviesData.rating.desc()).all()[:3]
     print([n.title for n in ordered_movies])
     print(current_user.name)
-    return render_template('index2.html', user_id=id, movies=movies, top_movies=ordered_movies, username=current_user.name)
+    return render_template('index2.html', movies=movies, top_movies=ordered_movies, username=current_user.name)
 
 
 @app.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
     form = SearchForm()
-    id = request.args.get('user_id')
     if form.validate_on_submit():
         movie = form.movie_name.data
         try:
             data = search_movie(movie)
-            return render_template('search2.html', form=form, data=data, user_id=id)
+            return render_template('search2.html', form=form, data=data, username=current_user.name)
         except IndexError:
             flash('Invalid Movie Detials')
             flash('Tip1 : Check movie name Spelling')
             flash('Tip2 : Space for two words is mandatory')
             flash('Tip3 : If both tip1 and tip2 doesnt work check spelling of the movie from the Internet ')
             return redirect('search')
-    return render_template('search2.html', form=form, user_id=id)
+    return render_template('search2.html', form=form, username=current_user.name)
 
 
 if __name__ == '__main__':
