@@ -20,5 +20,5 @@ class RegisterForm(FlaskForm):
 
 
 class SearchForm(FlaskForm):
-    movie_name = StringField('Movie Name', validators=[DataRequired()])
+    movie_name = StringField(validators=[DataRequired()])
     submit = SubmitField('Search')

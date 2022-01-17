@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+{% import "bootstrap/wtf.html" as wtf %}
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Movie Lib</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="static/assets/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" crossorigin="anonymous"></script>
+        <!-- Simple line icons-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css" rel="stylesheet" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="static/assets/css/styles.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+</head>
+<body>
+        <!-- Navigation-->
+
+        <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
+        <nav id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand"><a href="#page-top">Movie Library</a></li>
+                <li class="sidebar-nav-item"><a href="{{ url_for('homepage', user_id=user_id) }}">Home</a></li>
+                <li class="sidebar-nav-item"><a href="{{ url_for('search', user_id=user_id) }}">Search movie</a></li>
+                <li class="sidebar-nav-item"><a href="">Read me</a></li>
+                <li class="sidebar-nav-item"><a href="https://github.com/Rishi5254/movie_library">GitHub</a></li>
+                <li class="sidebar-nav-item"><a href="{{ url_for('logout_use') }}">Logout</a></li>
+            </ul>
+        </nav>
+
+        <section class="content-section bg-light" id="about">
+            <div class="container px-4 px-lg-5 text-center">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-10">
+                        <h2>Search A Movie By Name</h2>
+                        <div class="form-quick">
+                             {% with messages = get_flashed_messages() %}
+                              {% if messages %}
+                                {% for message in messages %}
+                                 <p style="color:red;">{{ message }}</p>
+                                {% endfor %}
+                              {% endif %}
+                            {% endwith %}
+                            {{ wtf.quick_form(form, novalidate=True, button_map={ "submit": "dark"}) }}
+                        </div>
+
+                    {% if data %}
+
+                        <div class="container" >
+                              <div class="card" >
+                                <div class="front" style="background-image: url(' https://www.themoviedb.org/t/p/w500{{ data['poster_path'] }} ');">
+                                </div>
+                                <div class="back">
+                                  <div>
+                                <div class="title">{{ data['title'] }} <span class="release_date">({{ data['release_date'].split('-')[0] }})</span></div>
+                                    <div class="rating">
+                                        <label>{{ data['vote_average'] }}</label>
+                                      <i class="fas fa-star star"></i>
+                                    </div>
+                                    <p class="overview">
+                                        {{ data['overview'] }}
+                                    </p>
+<!--                                    <a href="{{ url_for('delete', num=data['overview']) }}" class="button delete-button">Delete</a>-->
+                                  </div>
+                                </div>
+                              </div>
+                        </div>
+                        <h2 class="mb-5">Flip Card to view Movie Details</h2>
+                        <a href="{{ url_for('add_to_db', user_id=user_id, title=data['title'], release_date=data['release_date'].split('-')[0], rating=data['vote_average'], description=data['overview'], img_url=data['poster_path']) }}" class="btn btn-primary btn-lg">Add to List</a>
+                    {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="static/assets/js/scripts.js"></script>
+</body>
+</html>

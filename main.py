@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Movies.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sfsKR6b'
 db = SQLAlchemy(app)
 Bootstrap(app)
 
@@ -87,20 +87,8 @@ def login():
     return render_template("login.html", form=form)
 
 
-@app.route('/homepage')
-@login_required
-def homepage():
-    id = request.args.get('user_id')
-    movies = db.session.query(MoviesData).filter_by(user_id=id)
-    ordered_movies = db.session.query(MoviesData).filter_by(user_id=id).order_by(MoviesData.rating.desc()).all()[:3]
-    if movies:
-        movies_data = movies
-    else:
-        movies_data = None
-    return render_template('index.html', user_id=id, movies=movies_data, top_movies=ordered_movies)
-
-
 @app.route('/add')
+@login_required
 def add_to_db():
     user_id = request.args.get('user_id')
     title = request.args.get('title')
@@ -118,18 +106,6 @@ def add_to_db():
     return redirect(url_for('homepage', user_id=user_id))
 
 
-@app.route("/search", methods=['GET', 'POST'])
-@login_required
-def search():
-    form = SearchForm()
-    id = request.args.get('user_id')
-    if form.validate_on_submit():
-        movie = form.movie_name.data
-        data = search_movie(movie)
-        return render_template('search.html', form=form, data=data, user_id=id)
-    return render_template('search.html', form=form, user_id=id)
-
-
 @app.route('/logout')
 def logout_use():
     logout_user()
@@ -137,6 +113,7 @@ def logout_use():
 
 
 @app.route('/delete')
+@login_required
 def delete():
     id = request.args.get('movie_id')
     movie_to_delete = MoviesData.query.get(id)
@@ -149,6 +126,36 @@ def delete():
 def readme():
     id = request.args.get('user_id')
     return render_template('readme.html', user_id=id)
+
+
+@app.route('/homepage')
+def homepage():
+    id = request.args.get('user_id')
+    movies = db.session.query(MoviesData).filter_by(user_id=id)
+    ordered_movies = db.session.query(MoviesData).filter_by(user_id=id).order_by(MoviesData.rating.desc()).all()[:3]
+    print([n.title for n in ordered_movies])
+    print(current_user.name)
+    return render_template('index2.html', user_id=id, movies=movies, top_movies=ordered_movies, username=current_user.name)
+
+
+@app.route('/search', methods=['GET', 'POST'])
+@login_required
+def search():
+    form = SearchForm()
+    id = request.args.get('user_id')
+    if form.validate_on_submit():
+        movie = form.movie_name.data
+        try:
+            data = search_movie(movie)
+            return render_template('search2.html', form=form, data=data, user_id=id)
+        except IndexError:
+            flash('Invalid Movie Detials')
+            flash('Tip1 : Check movie name Spelling')
+            flash('Tip2 : Space for two words is mandatory')
+            flash('Tip3 : If both tip1 and tip2 doesnt work check spelling of the movie from the Internet ')
+            return redirect('search')
+    return render_template('search2.html', form=form, user_id=id)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
