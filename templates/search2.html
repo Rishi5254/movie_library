@@ -52,10 +52,14 @@
                             {{ wtf.quick_form(form, novalidate=True, button_map={ "submit": "dark"}) }}
                         </div>
 
-                    {% if data %}
-
+                    {% if all_data %}
+                        <div class="container-fluid" >
+                        <h1 class="mb-1" style="margin:25px 25px 25px; font-size:300%; "><em>Choose your movie From Query Results </em></h1>
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+                       {%  for data in all_data %}
+                        <div class="col">
                         <div class="container" >
-                              <div class="card" >
+                              <div class="card" style="width: 252px; margin:3rem 0;">
                                 <div class="front" style="background-image: url(' https://www.themoviedb.org/t/p/w500{{ data['poster_path'] }} ');">
                                 </div>
                                 <div class="back">
@@ -75,6 +79,12 @@
                         </div>
                         <h2 class="mb-5">Flip Card to view Movie Details</h2>
                         <a href="{{ url_for('add_to_db', title=data['title'], release_date=data['release_date'].split('-')[0], rating=data['vote_average'], description=data['overview'], img_url=data['poster_path']) }}" class="btn btn-primary btn-lg">Add to List</a>
+                        </div>
+                        {% endfor %}
+
+                        </div>
+                            </div>
+                    </div>
                     {% endif %}
 
                     </div>

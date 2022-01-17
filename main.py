@@ -144,7 +144,8 @@ def search():
         movie = form.movie_name.data
         try:
             data = search_movie(movie)
-            return render_template('search2.html', form=form, data=data, username=current_user.name)
+            print(data)
+            return render_template('search2.html', form=form, all_data=data, username=current_user.name)
         except IndexError:
             flash('Invalid Movie Detials')
             flash('Tip1 : Check movie name Spelling')
